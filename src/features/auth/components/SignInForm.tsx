@@ -1,38 +1,38 @@
-import { useState } from "react";
 import {useSignIn} from "../hooks/useSignIn.ts";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import type {CheckInPayload} from "../types/CheckInPayload.type.ts";
+import {signInSchema} from "../schemas/signIn.schema.ts";
 
 export function SignInForm() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const { mutate, isPending } = useSignIn();
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        mutate({ email, password });
-    };
+    const {register, handleSubmit, formState: {errors}} = useForm({
+        resolver: yupResolver(signInSchema)
+    })
+    const {mutate, isPending, isError, error} = useSignIn();
+    const onSubmit = (data: CheckInPayload) => mutate(data);
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <input
-                type="email"
-                placeholder="Email"
-                className="border p-2 rounded"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                className="border p-2 rounded"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 my-8">
+            <div className="flex flex-col gap-2">
+                <input
+                    {...register("identifier")}
+                    placeholder="E-mail or username"
+                    className="border p-2 rounded"
+                />
+                <p className="text-red-700 text-xs" role="alert">{errors.identifier?.message}</p>
+            </div>
+
+            {isError && (
+                <p className="bg-red-100 text-red-800 border text-md p-3 text-center">
+                    {error?.message || "An unexpected error occurred"}
+                </p>
+            )}
+
             <button
                 type="submit"
-                className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                disabled={isPending}
+                className="bg-indigo-800 text-white py-2 mt-4 rounded hover:bg-indigo-900 hover:cursor-pointer"
             >
-                {isPending ? "Loading..." : "Login"}
+                {isPending ? "Loading..." : "Next"}
             </button>
         </form>
     );

@@ -4,11 +4,11 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {signUpSchema} from "../schemas/signUp.schema.ts";
 import type {SignUpPayload} from "../types/SignUpPayload.type.ts";
 
-export function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
-    const { register, handleSubmit, formState: {errors} } = useForm({
+export function SignUpForm({onSuccess}: { onSuccess: () => void }) {
+    const {register, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(signUpSchema)
     })
-    const { mutate, isPending, isError, error } = useSignUp(onSuccess);
+    const {mutate, isPending, isError, error} = useSignUp(onSuccess);
     const onSubmit = (data: SignUpPayload) => mutate(data);
 
     return (
@@ -20,6 +20,14 @@ export function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
                     className="border p-2 rounded"
                 />
                 <p className="text-red-700 text-xs" role="alert">{errors.email?.message}</p>
+            </div>
+            <div className="flex flex-col gap-2">
+                <input
+                    {...register("username")}
+                    placeholder="Username"
+                    className="border p-2 rounded"
+                />
+                <p className="text-red-700 text-xs" role="alert">{errors.username?.message}</p>
             </div>
             <div className="flex flex-col gap-2">
                 <input

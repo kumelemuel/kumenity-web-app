@@ -1,17 +1,16 @@
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
-import { useUserStore } from "../../../app/store/userStore";
-import {signInRequest} from "../services/authService.ts";
+import {useMutation} from "@tanstack/react-query";
+import {checkInRequest} from "../services/authService.ts";
 
 export function useSignIn() {
-    const navigate = useNavigate();
-    const setToken = useUserStore((s) => s.setToken);
+    // const navigate = useNavigate();
+    // const setToken = useUserStore((s) => s.setToken);
 
     return useMutation({
-        mutationFn: signInRequest,
+        mutationFn: checkInRequest,
         onSuccess: (data) => {
-            setToken(data.token);
-            navigate("/dashboard");
+            console.log(data);
+            // setToken(data.token);
+            // navigate("/dashboard");
         },
     });
 }
