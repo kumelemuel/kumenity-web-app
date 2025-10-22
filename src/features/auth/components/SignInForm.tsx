@@ -1,14 +1,14 @@
-import {useSignIn} from "../hooks/useSignIn.ts";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import type {CheckInPayload} from "../types/CheckInPayload.type.ts";
 import {signInSchema} from "../schemas/signIn.schema.ts";
+import {useCheckIn} from "../hooks/useCheckIn.ts";
 
 export function SignInForm() {
     const {register, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(signInSchema)
     })
-    const {mutate, isPending, isError, error} = useSignIn();
+    const {mutate, isPending, isError, error} = useCheckIn();
     const onSubmit = (data: CheckInPayload) => mutate(data);
 
     return (

@@ -1,6 +1,6 @@
 import {SignUpForm} from "../components/SignUpForm.tsx";
 import {useState} from "react";
-import {Welcome} from "../components/Welcome.tsx";
+import {ValidationCodeForm} from "../components/ValidationCodeForm.tsx";
 
 export function SignUpPage() {
     const [success, setSuccess] = useState(false);
@@ -18,7 +18,7 @@ export function SignUpPage() {
                     </div>
                 </>
             ) : (
-                <Welcome/>
+                <ValidationCodeForm/>
             )}
         </>
     );
