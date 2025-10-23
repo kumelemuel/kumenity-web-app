@@ -1,5 +1,5 @@
-import * as yup from "yup";
+import * as z from "zod"
 
-export const signInSchema = yup.object({
-    identifier: yup.string().required("Identifier required").min(5, "Must have at least 5 characters"),
+export const signInSchema = z.object({
+    password: z.string().min(8, "Must have at least 8 characters"),
 });

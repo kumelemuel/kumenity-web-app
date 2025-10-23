@@ -1,5 +1,5 @@
 import {useMutation} from "@tanstack/react-query";
-import {useAuthStore} from "../../../app/store/authStore.tsx";
+import {useAuthStore} from "@app/store/authStore.tsx";
 import {validationCodeRequest} from "../services/authService.ts";
 import type {ValidationCodePayload} from "../types/ValidationCodePayload.type.ts";
 

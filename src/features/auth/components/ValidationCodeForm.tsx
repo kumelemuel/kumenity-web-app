@@ -1,52 +1,98 @@
-import {useAuthStore} from "../../../app/store/authStore.tsx";
-import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
-import {validationCodeSchema} from "../schemas/validationCode.schema.ts";
-import type {ValidationCodePayload} from "../types/ValidationCodePayload.type.ts";
-import {useValidationCode} from "../hooks/useValidationCode.ts";
+import {useForm} from "@tanstack/react-form";
+import {useValidationCode} from "@features/auth/hooks/useValidationCode.ts";
+import {useAuthStore} from "@app/store/authStore.tsx";
+import {validationCodeSchema} from "@features/auth/schemas/validationCode.schema.ts";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@app/components/ui/card.tsx";
+import {Field, FieldError, FieldGroup} from "@app/components/ui/field.tsx";
+import {Input} from "@app/components/ui/input.tsx";
+import {Button} from "@app/components/ui/button.tsx";
+import {Spinner} from "@app/components/ui/spinner.tsx";
+import {Alert, AlertTitle} from "@app/components/ui/alert.tsx";
+import {AlertCircleIcon} from "lucide-react";
 
 export function ValidationCodeForm() {
-    const {register, handleSubmit, formState: {errors}} = useForm({
-        resolver: yupResolver(validationCodeSchema)
-    })
     const {mutate, isPending, isError, error} = useValidationCode();
-    const onSubmit = (data: ValidationCodePayload) => mutate(data);
+    const form = useForm({
+        defaultValues: {
+            code: "",
+        },
+        validators: {
+            onSubmit: validationCodeSchema,
+        },
+        onSubmit: async ({value}) => {
+            mutate(value);
+        },
+    })
     const user = useAuthStore((state) => state.user);
 
     return (
-        <div className="text-center">
-            <h2 className="text-xl font-semibold mb-2">Welcome {user?.username}!</h2>
-            <p className="text-gray-700 mb-4">
-                You will receive an email with an validation code so you can validate your account.
-            </p>
-
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 my-8">
-                <div className="flex flex-col gap-2">
-                    <input
-                        {...register("code")}
-                        placeholder="Validation code"
-                        className="border p-2 rounded"
-                    />
-                    <p className="text-red-700 text-xs" role="alert">{errors.code?.message}</p>
-                </div>
-
+        <Card className="w-full sm:max-w-md">
+            <CardHeader>
+                <CardTitle>Welcome {user?.username}!</CardTitle>
+                <CardDescription>
+                    You will receive an email with an validation code so you can validate your account.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form id="validation-code-form" onSubmit={(e) => {
+                    e.preventDefault()
+                    form.handleSubmit().then(() => null)
+                }}>
+                    <FieldGroup>
+                        <form.Field
+                            name="code"
+                            children={(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched && !field.state.meta.isValid
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            placeholder="Enter your validation code"
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError errors={field.state.meta.errors}/>
+                                        )}
+                                    </Field>
+                                )
+                            }}
+                        />
+                    </FieldGroup>
+                </form>
+            </CardContent>
+            <CardFooter className="flex-col gap">
                 {isError && (
-                    <p className="bg-red-100 text-red-800 border text-md p-3 text-center">
-                        {error?.message || "An unexpected error occurred"}
-                    </p>
+                    <Alert variant="destructive" className="mb-4">
+                        <AlertCircleIcon/>
+                        <AlertTitle>{error?.message || "An unexpected error occurred"}</AlertTitle>
+                    </Alert>
                 )}
-
-                <button
+                <Button
                     type="submit"
-                    className="bg-indigo-800 text-white py-2 mt-4 rounded hover:bg-indigo-900 hover:cursor-pointer"
+                    variant="outline"
+                    className="w-full"
+                    form="validation-code-form"
+                    disabled={isPending}
                 >
-                    {isPending ? "Loading..." : "Validate"}
-                </button>
-            </form>
-
-            <a href="/" className="text-indigo-700 hover:underline">
-                Go to home
-            </a>
-        </div>
+                    {isPending ? <Spinner className="size-6"/> : "Validate"}
+                </Button>
+                <div className="text-center mt-4">
+                    <Button variant="link">
+                        <a href="/auth/sign-in">Already have an account?</a>
+                    </Button>
+                </div>
+                <div className="text-center">
+                    <Button variant="link">
+                        <a href="/">Go back to Home</a>
+                    </Button>
+                </div>
+            </CardFooter>
+        </Card>
     );
 }

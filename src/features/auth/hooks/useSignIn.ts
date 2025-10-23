@@ -1,12 +1,12 @@
 import {useMutation} from "@tanstack/react-query";
-import {checkInRequest} from "../services/authService.ts";
+import {signInRequest} from "../services/authService.ts";
 
 export function useSignIn() {
     // const navigate = useNavigate();
     // const setToken = useUserStore((s) => s.setToken);
 
     return useMutation({
-        mutationFn: checkInRequest,
+        mutationFn: signInRequest,
         onSuccess: (data) => {
             console.log(data);
             // setToken(data.token);

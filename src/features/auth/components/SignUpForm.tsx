@@ -1,65 +1,177 @@
-import {useForm} from "react-hook-form"
 import {useSignUp} from "../hooks/useSignUp.ts";
-import {yupResolver} from "@hookform/resolvers/yup";
 import {signUpSchema} from "../schemas/signUp.schema.ts";
-import type {SignUpPayload} from "../types/SignUpPayload.type.ts";
+import {useForm} from "@tanstack/react-form"
+import {Field, FieldError, FieldGroup, FieldLabel} from "@app/components/ui/field.tsx";
+import {Input} from "@app/components/ui/input.tsx";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@app/components/ui/card.tsx";
+import {Button} from "@app/components/ui/button.tsx";
+import {Spinner} from "@app/components/ui/spinner.tsx";
+import {Alert, AlertTitle} from "@app/components/ui/alert.tsx";
+import {AlertCircleIcon} from "lucide-react";
 
 export function SignUpForm({onSuccess}: { onSuccess: () => void }) {
-    const {register, handleSubmit, formState: {errors}} = useForm({
-        resolver: yupResolver(signUpSchema)
-    })
     const {mutate, isPending, isError, error} = useSignUp(onSuccess);
-    const onSubmit = (data: SignUpPayload) => mutate(data);
+    const form = useForm({
+        defaultValues: {
+            email: "",
+            username: "",
+            password: "",
+            confirmPassword: "",
+        },
+        validators: {
+            onSubmit: signUpSchema,
+        },
+        onSubmit: async ({value}) => {
+            mutate(value);
+        },
+    })
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 my-8">
-            <div className="flex flex-col gap-2">
-                <input
-                    {...register("email")}
-                    placeholder="E-mail"
-                    className="border p-2 rounded"
-                />
-                <p className="text-red-700 text-xs" role="alert">{errors.email?.message}</p>
-            </div>
-            <div className="flex flex-col gap-2">
-                <input
-                    {...register("username")}
-                    placeholder="Username"
-                    className="border p-2 rounded"
-                />
-                <p className="text-red-700 text-xs" role="alert">{errors.username?.message}</p>
-            </div>
-            <div className="flex flex-col gap-2">
-                <input
-                    {...register("password")}
-                    type="password"
-                    placeholder="Password"
-                    className="border p-2 rounded"
-                />
-                <p className="text-red-700 text-xs" role="alert">{errors.password?.message}</p>
-            </div>
-            <div className="flex flex-col gap-2">
-                <input
-                    {...register("confirmPassword")}
-                    type="password"
-                    placeholder="Confirm password"
-                    className="border p-2 rounded"
-                />
-                <p className="text-red-700 text-xs" role="alert">{errors.confirmPassword?.message}</p>
-            </div>
-
-            {isError && (
-                <p className="bg-red-100 text-red-800 border text-md p-3 text-center">
-                    {error?.message || "An unexpected error occurred"}
-                </p>
-            )}
-
-            <button
-                type="submit"
-                className="bg-indigo-800 text-white py-2 mt-4 rounded hover:bg-indigo-900 hover:cursor-pointer"
-            >
-                {isPending ? "Loading..." : "Create account"}
-            </button>
-        </form>
+        <Card className="w-full sm:max-w-md">
+            <CardHeader>
+                <CardTitle>Create a new account</CardTitle>
+                <CardDescription>
+                    Be part of the community and start your journey with us.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form id="sign-up-form" onSubmit={(e) => {
+                    e.preventDefault()
+                    form.handleSubmit()
+                }}>
+                    <FieldGroup>
+                        <form.Field
+                            name="email"
+                            children={(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched && !field.state.meta.isValid
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>E-mail</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            placeholder="E-mail"
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError errors={field.state.meta.errors}/>
+                                        )}
+                                    </Field>
+                                )
+                            }}
+                        />
+                        <form.Field
+                            name="username"
+                            children={(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched && !field.state.meta.isValid
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            placeholder="Username"
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError errors={field.state.meta.errors}/>
+                                        )}
+                                    </Field>
+                                )
+                            }}
+                        />
+                        <form.Field
+                            name="password"
+                            children={(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched && !field.state.meta.isValid
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            type="password"
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            placeholder="Password"
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError errors={field.state.meta.errors}/>
+                                        )}
+                                    </Field>
+                                )
+                            }}
+                        />
+                        <form.Field
+                            name="confirmPassword"
+                            children={(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched && !field.state.meta.isValid
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>Confirm password</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="password"
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            placeholder="Confirm password"
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError errors={field.state.meta.errors}/>
+                                        )}
+                                    </Field>
+                                )
+                            }}
+                        />
+                    </FieldGroup>
+                </form>
+            </CardContent>
+            <CardFooter className="flex-col gap">
+                {isError && (
+                    <Alert variant="destructive" className="mb-4">
+                        <AlertCircleIcon/>
+                        <AlertTitle>{error?.message || "An unexpected error occurred"}</AlertTitle>
+                    </Alert>
+                )}
+                <Button
+                    type="submit"
+                    variant="outline"
+                    className="w-full"
+                    form="sign-up-form"
+                    disabled={isPending}
+                >
+                    {isPending ? <Spinner className="size-6"/> : "Create account"}
+                </Button>
+                <div className="text-center mt-4">
+                    <Button variant="link">
+                        <a href="/auth/sign-in">Already have an account?</a>
+                    </Button>
+                </div>
+                <div className="text-center">
+                    <Button variant="link">
+                        <a href="/">Go back to Home</a>
+                    </Button>
+                </div>
+            </CardFooter>
+        </Card>
     );
 }
