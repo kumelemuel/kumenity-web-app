@@ -21,14 +21,14 @@ export async function signUpRequest(payload: SignUpPayload): Promise<SignUpRespo
     return data.data;
 }
 
-export async function validationCodeRequest(userId: string, payload: ValidationCodePayload): Promise<ValidationCodeResponse> {
+export async function validationCodeRequest(username: string, payload: ValidationCodePayload): Promise<ValidationCodeResponse> {
     await new Promise((r) => setTimeout(r, 1000));
-    const {data} = await apiClient.post<ApiResponse<ValidationCodeResponse>>("/auth/validate-user", {id: userId, ...payload});
+    const {data} = await apiClient.post<ApiResponse<ValidationCodeResponse>>("/auth/validate-user", {username, ...payload});
     return data.data;
 }
 
-export async function signInRequest(payload: SignInPayload): Promise<SignInResponse> {
+export async function signInRequest(username: string, payload: SignInPayload): Promise<SignInResponse> {
     await new Promise((r) => setTimeout(r, 1000));
-    const {data} = await apiClient.post<ApiResponse<SignInResponse>>("/auth/sign-in", payload);
+    const {data} = await apiClient.post<ApiResponse<SignInResponse>>("/auth/sign-in", {username, ...payload});
     return data.data;
 }
