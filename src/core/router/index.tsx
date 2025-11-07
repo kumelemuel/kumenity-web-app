@@ -1,9 +1,9 @@
 import {createBrowserRouter} from "react-router";
-import {SignInPage} from "@features/auth/pages/SignInPage.tsx";
-import {SignUpPage} from "@features/auth/pages/SignUpPage.tsx";
-import {HomePage} from "@features/auth/pages/HomePage.tsx";
-import {HomeLayout} from "@shared/ui/layouts/HomeLayout.tsx";
-import {AuthLayout} from "@shared/ui/layouts/AuthLayout.tsx";
+import {SignInPage} from "@features/auth/presentation/pages/SignInPage.tsx";
+import {SignUpPage} from "@features/auth/presentation/pages/SignUpPage.tsx";
+import {HomePage} from "@features/auth/presentation/pages/HomePage.tsx";
+import {HomeLayout} from "@shared/presentation/layouts/HomeLayout.tsx";
+import {AuthLayout} from "@shared/presentation/layouts/AuthLayout.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
         ],
     },
     {
-        path: "/auth",
+        path: "/auth_dirty",
         element: <AuthLayout/>,
         children: [
             {

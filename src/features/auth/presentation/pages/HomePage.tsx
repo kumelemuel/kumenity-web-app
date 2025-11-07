@@ -1,4 +1,4 @@
-import {Button} from "@app/components/ui/button.tsx";
+import {Button} from "@shared/presentation/components/ui/button.tsx";
 
 export function HomePage() {
     return (

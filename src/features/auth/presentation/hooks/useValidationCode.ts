@@ -1,5 +1,5 @@
 import {useMutation} from "@tanstack/react-query";
-import {useAuthStore} from "@app/store/authStore.tsx";
+import {useAuthStore} from "@features/auth/presentation/store/authStore.tsx";
 import {validationCodeRequest} from "../services/authService.ts";
 import type {ValidationCodePayload} from "../types/ValidationCodePayload.type.ts";
 import {useLocation} from "react-router";
@@ -14,8 +14,8 @@ export function useValidationCode() {
             validationCodeRequest(user!.username, payload),
         onSuccess: (userData) => {
             updateUser(userData);
-            if (location.pathname === "/auth/sign-up") {
-                window.location.href = "/auth/sign-in";
+            if (location.pathname === "/auth_dirty/sign-up") {
+                window.location.href = "/auth_dirty/sign-in";
             }
 
         },

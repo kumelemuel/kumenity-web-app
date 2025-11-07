@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 import {signInRequest} from "../services/authService.ts";
-import {useAuthStore} from "@app/store/authStore.tsx";
-import type {SignInPayload} from "@features/auth/types/SignInPayload.type.ts";
+import {useAuthStore} from "@features/auth/presentation/store/authStore.tsx";
+import type {SignInPayload} from "@features/auth/presentation/types/SignInPayload.type.ts";
 import {useNavigate} from "react-router";
 
 export function useSignIn() {

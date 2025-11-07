@@ -1,12 +1,19 @@
 import {useSignUp} from "../hooks/useSignUp.ts";
 import {signUpSchema} from "../schemas/signUp.schema.ts";
 import {useForm} from "@tanstack/react-form"
-import {Field, FieldError, FieldGroup, FieldLabel} from "@app/components/ui/field.tsx";
-import {Input} from "@app/components/ui/input.tsx";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@app/components/ui/card.tsx";
-import {Button} from "@app/components/ui/button.tsx";
-import {Spinner} from "@app/components/ui/spinner.tsx";
-import {Alert, AlertTitle} from "@app/components/ui/alert.tsx";
+import {Field, FieldError, FieldGroup, FieldLabel} from "@shared/presentation/components/ui/field.tsx";
+import {Input} from "@shared/presentation/components/ui/input.tsx";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle
+} from "@shared/presentation/components/ui/card.tsx";
+import {Button} from "@shared/presentation/components/ui/button.tsx";
+import {Spinner} from "@shared/presentation/components/ui/spinner.tsx";
+import {Alert, AlertTitle} from "@shared/presentation/components/ui/alert.tsx";
 import {AlertCircleIcon} from "lucide-react";
 
 export function SignUpForm({onSuccess}: { onSuccess: () => void }) {
@@ -168,7 +175,7 @@ export function SignUpForm({onSuccess}: { onSuccess: () => void }) {
                 </div>
                 <div className="text-center">
                     <Button variant="link">
-                        <a href="/">Go back to Home</a>
+                        <a href="/public">Go back to Home</a>
                     </Button>
                 </div>
             </CardFooter>

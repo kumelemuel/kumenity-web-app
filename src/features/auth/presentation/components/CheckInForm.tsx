@@ -1,51 +1,50 @@
 import {useForm} from "@tanstack/react-form";
-import {useValidationCode} from "@features/auth/hooks/useValidationCode.ts";
-import {useAuthStore} from "@app/store/authStore.tsx";
-import {validationCodeSchema} from "@features/auth/schemas/validationCode.schema.ts";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@app/components/ui/card.tsx";
-import {Field, FieldError, FieldGroup} from "@app/components/ui/field.tsx";
-import {Input} from "@app/components/ui/input.tsx";
-import {Button} from "@app/components/ui/button.tsx";
-import {Spinner} from "@app/components/ui/spinner.tsx";
-import {Alert, AlertTitle} from "@app/components/ui/alert.tsx";
+import {checkInSchema} from "@features/auth/presentation/schemas/checkIn.schema.ts";
+import {useCheckIn} from "@features/auth/presentation/hooks/useCheckIn.ts";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@shared/presentation/components/ui/card.tsx";
+import {Field, FieldError, FieldGroup, FieldLabel} from "@shared/presentation/components/ui/field.tsx";
+import {Input} from "@shared/presentation/components/ui/input.tsx";
+import {Button} from "@shared/presentation/components/ui/button.tsx";
+import {Spinner} from "@shared/presentation/components/ui/spinner.tsx";
+import {Alert, AlertTitle} from "@shared/presentation/components/ui/alert.tsx";
 import {AlertCircleIcon} from "lucide-react";
 
-export function ValidationCodeForm() {
-    const {mutate, isPending, isError, error} = useValidationCode();
+export function CheckInForm() {
+    const {mutate, isPending, isError, error} = useCheckIn();
     const form = useForm({
         defaultValues: {
-            code: "",
+            identifier: "",
         },
         validators: {
-            onSubmit: validationCodeSchema,
+            onSubmit: checkInSchema,
         },
         onSubmit: async ({value}) => {
             mutate(value);
         },
     })
-    const user = useAuthStore((state) => state.user);
 
     return (
         <Card className="w-full sm:max-w-md">
             <CardHeader>
-                <CardTitle>Welcome {user?.username}!</CardTitle>
-                <CardDescription>
-                    You will receive an email with an validation code so you can validate your account.
-                </CardDescription>
+                <CardTitle>Sign in</CardTitle>
+                {/*<CardDescription>*/}
+                {/*    You will receive an email with an validation code so you can validate your account.*/}
+                {/*</CardDescription>*/}
             </CardHeader>
             <CardContent>
-                <form id="validation-code-form" onSubmit={(e) => {
+                <form id="check-in-form" onSubmit={(e) => {
                     e.preventDefault()
                     form.handleSubmit().then(() => null)
                 }}>
                     <FieldGroup>
                         <form.Field
-                            name="code"
+                            name="identifier"
                             children={(field) => {
                                 const isInvalid =
                                     field.state.meta.isTouched && !field.state.meta.isValid
                                 return (
                                     <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>Identifier</FieldLabel>
                                         <Input
                                             id={field.name}
                                             name={field.name}
@@ -53,7 +52,7 @@ export function ValidationCodeForm() {
                                             onBlur={field.handleBlur}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             aria-invalid={isInvalid}
-                                            placeholder="Enter your validation code"
+                                            placeholder="Enter your e-mail or username"
                                             autoComplete="off"
                                         />
                                         {isInvalid && (
@@ -77,19 +76,19 @@ export function ValidationCodeForm() {
                     type="submit"
                     variant="outline"
                     className="w-full"
-                    form="validation-code-form"
+                    form="check-in-form"
                     disabled={isPending}
                 >
-                    {isPending ? <Spinner className="size-6"/> : "Validate"}
+                    {isPending ? <Spinner className="size-6"/> : "Next"}
                 </Button>
                 <div className="text-center mt-4">
                     <Button variant="link">
-                        <a href="/auth/sign-in">Already have an account?</a>
+                        <a href="/auth/sign-up">Don't have an account yet? Sign up</a>
                     </Button>
                 </div>
                 <div className="text-center">
                     <Button variant="link">
-                        <a href="/">Go back to Home</a>
+                        <a href="/public">Go back to Home</a>
                     </Button>
                 </div>
             </CardFooter>

@@ -1,5 +1,5 @@
 import {CheckInForm} from "../components/CheckInForm.tsx";
-import {useAuthStore} from "@app/store/authStore.tsx";
+import {useAuthStore} from "@features/auth/presentation/store/authStore.tsx";
 import {ValidationCodeForm} from "../components/ValidationCodeForm.tsx";
 import {SignInForm} from "../components/SignInForm.tsx";
 

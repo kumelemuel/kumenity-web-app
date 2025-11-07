@@ -1,6 +1,6 @@
 import {useMutation} from "@tanstack/react-query";
-import {signUpRequest} from "../services/authService";
-import {useAuthStore} from "@app/store/authStore.tsx";
+import {signUpRequest} from "../services/authService.ts";
+import {useAuthStore} from "@features/auth/presentation/store/authStore.tsx";
 
 export function useSignUp(onSuccess: () => void) {
 

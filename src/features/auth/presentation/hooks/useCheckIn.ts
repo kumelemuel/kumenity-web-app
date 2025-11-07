@@ -1,6 +1,6 @@
 import {useMutation} from "@tanstack/react-query";
 import {checkInRequest} from "../services/authService.ts";
-import {useAuthStore} from "@app/store/authStore.tsx";
+import {useAuthStore} from "@features/auth/presentation/store/authStore.tsx";
 
 export function useCheckIn() {
     const setUser = useAuthStore((state) => state.setUser);

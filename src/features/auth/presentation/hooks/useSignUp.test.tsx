@@ -1,7 +1,7 @@
 import {act, renderHook, waitFor} from '@testing-library/react'
-import {useSignUp} from './useSignUp'
-import {useAuthStore} from '@app/store/authStore'
-import {signUpRequest} from '../services/authService'
+import {useSignUp} from './useSignUp.ts'
+import {useAuthStore} from '@features/auth/presentation/store/authStore.tsx'
+import {signUpRequest} from '../services/authService.ts'
 import type {Mock} from 'vitest'
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
@@ -12,7 +12,7 @@ vi.mock('../services/authService', () => ({
     signUpRequest: vi.fn(),
 }))
 
-vi.mock('@app/store/authStore', () => ({
+vi.mock('@core/store/authStore', () => ({
     useAuthStore: vi.fn(),
 }))
 
