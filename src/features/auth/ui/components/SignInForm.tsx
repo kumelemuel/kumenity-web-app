@@ -1,5 +1,5 @@
 import {useForm} from "@tanstack/react-form";
-import {useAuthStore} from "@app/store/authStore.tsx";
+import {useAuthStore} from "@features/auth/state/stores/auth.store.tsx";
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@app/components/ui/card.tsx";
 import {Field, FieldError, FieldGroup, FieldLabel} from "@app/components/ui/field.tsx";
 import {Input} from "@app/components/ui/input.tsx";
@@ -7,8 +7,8 @@ import {Alert, AlertTitle} from "@app/components/ui/alert.tsx";
 import {AlertCircleIcon} from "lucide-react";
 import {Button} from "@app/components/ui/button.tsx";
 import {Spinner} from "@app/components/ui/spinner.tsx";
-import {signInSchema} from "@features/auth/schemas/signIn.schema.ts";
-import {useSignIn} from "@features/auth/hooks/useSignIn.ts";
+import {signInSchema} from "@features/auth/ui/validations/signIn.schema.ts";
+import {useSignIn} from "@features/auth/state/hooks/useSignIn.ts";
 
 export function SignInForm() {
     const {mutate, isPending, isError, error} = useSignIn();
@@ -89,7 +89,7 @@ export function SignInForm() {
                 </div>
                 <div className="text-center">
                     <Button variant="link">
-                        <a href="/">Go back to Home</a>
+                        <a href="/public">Go back to Home</a>
                     </Button>
                 </div>
             </CardFooter>

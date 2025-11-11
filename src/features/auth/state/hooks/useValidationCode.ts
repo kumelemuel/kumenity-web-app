@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
-import {useAuthStore} from "@app/store/authStore.tsx";
-import {validationCodeRequest} from "../services/authService.ts";
-import type {ValidationCodePayload} from "../types/ValidationCodePayload.type.ts";
+import {useAuthStore} from "@features/auth/state/stores/auth.store.tsx";
+import {validationCodeService} from "@features/auth/services/auth.service.ts";
+import type {ValidationCodeRequest} from "@features/auth/services/types/validation-code.d.ts";
 import {useLocation} from "react-router";
 
 export function useValidationCode() {
@@ -10,8 +10,8 @@ export function useValidationCode() {
     const location = useLocation();
 
     return useMutation({
-        mutationFn: (payload: ValidationCodePayload) =>
-            validationCodeRequest(user!.username, payload),
+        mutationFn: (payload: ValidationCodeRequest) =>
+            validationCodeService(user!.username, payload),
         onSuccess: (userData) => {
             updateUser(userData);
             if (location.pathname === "/auth/sign-up") {

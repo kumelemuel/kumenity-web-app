@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
-import {signInRequest} from "../services/authService.ts";
-import {useAuthStore} from "@app/store/authStore.tsx";
-import type {SignInPayload} from "@features/auth/types/SignInPayload.type.ts";
+import {signInService} from "@features/auth/services/auth.service.ts";
+import {useAuthStore} from "@features/auth/state/stores/auth.store.tsx";
+import type {SignInRequest} from "@features/auth/services/types/sign-in.d.ts";
 import {useNavigate} from "react-router";
 
 export function useSignIn() {
@@ -10,8 +10,8 @@ export function useSignIn() {
     const setToken = useAuthStore((s) => s.setToken);
 
     return useMutation({
-        mutationFn: (payload: SignInPayload) =>
-            signInRequest(user!.username!, payload),
+        mutationFn: (payload: SignInRequest) =>
+            signInService(user!.username!, payload),
         onSuccess: (data) => {
             setToken(data.token);
             navigate("/dashboard");

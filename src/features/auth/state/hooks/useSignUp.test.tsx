@@ -1,7 +1,7 @@
 import {act, renderHook, waitFor} from '@testing-library/react'
-import {useSignUp} from './useSignUp'
-import {useAuthStore} from '@app/store/authStore'
-import {signUpRequest} from '../services/authService'
+import {useSignUp} from './useSignUp.ts'
+import {useAuthStore} from '@features/auth/state/stores/auth.store.tsx'
+import {signUpService} from '@features/auth/services/auth.service.ts'
 import type {Mock} from 'vitest'
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
@@ -12,7 +12,7 @@ vi.mock('../services/authService', () => ({
     signUpRequest: vi.fn(),
 }))
 
-vi.mock('@app/store/authStore', () => ({
+vi.mock('@app/state/authStore', () => ({
     useAuthStore: vi.fn(),
 }))
 
@@ -33,7 +33,7 @@ describe('useSignUp', () => {
         ;(useAuthStore as unknown as Mock).mockReturnValue(mockSetUser)
 
         // React Query mock response
-        ;(signUpRequest as unknown as Mock).mockResolvedValue({
+        ;(signUpService as unknown as Mock).mockResolvedValue({
             username: 'kume',
             status: 'active',
         })
@@ -52,7 +52,7 @@ describe('useSignUp', () => {
         })
 
         // expect: se llamó signUpRequest con los datos correctos
-        expect(signUpRequest).toHaveBeenCalledWith(
+        expect(signUpService).toHaveBeenCalledWith(
             expect.objectContaining({username: 'kume', email: 'test@test.cl', password: '1234'}),
             expect.any(Object)
         )
@@ -65,7 +65,7 @@ describe('useSignUp', () => {
     })
 
     it('should handle API errors', async () => {
-        ;(signUpRequest as unknown as Mock).mockRejectedValueOnce(new Error('Network error'))
+        ;(signUpService as unknown as Mock).mockRejectedValueOnce(new Error('Network error'))
 
         const {result} = renderHook(() => useSignUp(mockOnSuccess), {wrapper})
 

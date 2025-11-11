@@ -1,13 +1,13 @@
 import {useMutation} from "@tanstack/react-query";
-import {signUpRequest} from "../services/authService";
-import {useAuthStore} from "@app/store/authStore.tsx";
+import {signUpService} from "@features/auth/services/auth.service.ts";
+import {useAuthStore} from "@features/auth/state/stores/auth.store.tsx";
 
 export function useSignUp(onSuccess: () => void) {
 
     const setUser = useAuthStore((state) => state.setUser);
 
     return useMutation({
-        mutationFn: signUpRequest,
+        mutationFn: signUpService,
         onSuccess: (userData) => {
             setUser(userData);
             onSuccess();

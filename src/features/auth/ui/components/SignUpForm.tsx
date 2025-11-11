@@ -1,5 +1,5 @@
-import {useSignUp} from "../hooks/useSignUp.ts";
-import {signUpSchema} from "../schemas/signUp.schema.ts";
+import {useSignUp} from "@features/auth/state/hooks/useSignUp.ts";
+import {signUpSchema} from "@features/auth/ui/validations/signUp.schema.ts";
 import {useForm} from "@tanstack/react-form"
 import {Field, FieldError, FieldGroup, FieldLabel} from "@app/components/ui/field.tsx";
 import {Input} from "@app/components/ui/input.tsx";
@@ -168,7 +168,7 @@ export function SignUpForm({onSuccess}: { onSuccess: () => void }) {
                 </div>
                 <div className="text-center">
                     <Button variant="link">
-                        <a href="/">Go back to Home</a>
+                        <a href="/public">Go back to Home</a>
                     </Button>
                 </div>
             </CardFooter>
